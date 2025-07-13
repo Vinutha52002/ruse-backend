@@ -5,8 +5,9 @@ import certifi
 # from serverless_wsgi import handle_request
 from pymongo.errors import PyMongoError
 import traceback
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory
 from flask_bcrypt import Bcrypt
+
 
 from flask_jwt_extended import (
     create_access_token,
@@ -261,6 +262,10 @@ def greet():
         print(" Error:", e)
         return jsonify({"error": "Invalid request"}), 401
     
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    return send_from_directory('images', filename)
+
 
 @app.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
